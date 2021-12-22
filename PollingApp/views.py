@@ -2,8 +2,10 @@
 
 # Create your views here.
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from . import user_login
+from .forms import RegistrationForm
+from .models import *
 
 
 def login(request):
@@ -41,3 +43,13 @@ def results(request):
 def vote(request):
     context = {}
     return render(request, 'polls/vote.html', context)
+
+
+def registration(request):
+    form = RegistrationForm(request.POST)
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            #form.save()
+            return redirect('/')
+    return render(request, 'polls/user_registration.html', context={'form': form})
