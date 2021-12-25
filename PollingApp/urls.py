@@ -12,4 +12,6 @@ urlpatterns = [
     path('create/', views.create, name='create'),
     path('home/results/', views.results, name='results'),
     path('home/vote/', views.vote, name='vote'),
+    path('home/delete/<int:task_id>/', views.delete, name='delete'),
+    path('home/update/<int:task_id>/<int:category_id>', views.update, name='update')
 ]

@@ -13,11 +13,20 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.16/css/mdb.min.css" rel="stylesheet">
 
     <style>
-.hide{
-  display:none;
-}
-.show{
-  display:block;
+.custom-card {
+        border: 0; !important;
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 7%), 0 4px 6px -2px rgb(0 0 0 / 5%);
+    /* max-width: 22rem; */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    /* border: 1px solid rgba(0,0,0,.125); */
+    /* border-radius: 0.5rem; */
+    padding: 1.5rem;
 }
 </style>
 <script>
@@ -28,10 +37,16 @@
 }
 
 function showValue() {
-  var name = document.getElementById('name').value;
+  var name = document.getElementById('name')?.value;
   document.getElementById('form').style.display = "none";
   document.getElementById('btn').style.display = "block";
 }
+
+function showValue1() {
+  document.getElementById('form').style.display = "none";
+  document.getElementById('btn').style.display = "block";
+}
+
 function allowDrop(ev) {
   ev.preventDefault();
 }
@@ -43,9 +58,15 @@ function drag(ev) {
 function drop(ev) {
   ev.preventDefault();
   var data = ev.dataTransfer.getData('text');
-  var target = ev.target;
+  var target = ev.currentTarget;
   while (" "+target.className+" ".indexOf(" dropzone ") == -1) target = target.parentNode;
   target.appendChild(document.getElementById(data));
+  var parentId = target.parentNode.getAttribute("id");
+  var category = parentId == "card1" ? 1 : 2;
+  var currentURL = window.location.href
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", currentURL + 'update/' + data + '/' + category, true);
+    xhr.send();
 }
 window.addEventListener("load",function () {
 	var elms = document.querySelectorAll(".div1");
@@ -173,15 +194,21 @@ window.addEventListener("load",function () {
 
 <div class="row">
     <div class="col-sm-6">
-        <div class="card div1">
-            <div class="card-body" id="div1">
+        <div class="card" id="card1">
+            <div class="card-body div1" id="div1">
                 <h4 class="card-title"><a>To do</a></h4>
                <div class="card-text">
                 <div class="list-group drop-true list-group list-group-flush">
-                    <p id="drag1" draggable="true">Lion</p>
-                    <p id="drag2" draggable="true">Dog</p>
-                    <p id="drag3" draggable="true">Cat</p>
-                    <p id="drag4" draggable="true">Tiger</p>
+                    {% for task in tasks %}
+
+                         {% if task.task_category == 1 %}
+                             <form action="delete/{{ task.id }}" method="delete">
+                                {% csrf_token %}
+                                <p id="{{task.id}}" class="custom-card" draggable="true">{{ task.task_name }}</p>
+                                <a><button type="submit" ><i class="fa fa-remove"></i></button></a>
+                        </form>
+                        {% endif %}
+                    {% endfor %}
                 </div>
                </div>
                 <div id="div_ctrl">
@@ -189,32 +216,39 @@ window.addEventListener("load",function () {
                     {% csrf_token%}
                             <label class="mt-2 text-black font-weight-normal" for="task_name">Enter Task: </label><br>
                             {% render_field form.task_name class="form-control" %}
+                            <br>
                             <button type="submit" onclick="showValue()">submit</button>
+                            <button type="button" onclick="showValue1()"><i class="fa fa-close"></i></button>
                     </form>
                 </div>
                 <div style="float: right">
-                    <button type="submit" id="btn" value="Show Text Field" onclick="showDiv()"><i class="fa fa-plus"></i></button>
+                    <button type="submit" id="btn" onclick="showDiv()"><i class="fa fa-plus"></i></button>
                 </div>
              </div>
         </div>
     </div>
             <br>
     <div class="col-sm-6">
-        <div class="card div1">
-            <div class="card-body" id="div2">
+        <div class="card" id="card2">
+            <div class="card-body div1" id="div2">
                   <h4 class="card-title"><a>Card title</a></h4>
                 <div class="card-text">
                     <div class="list-group drop-true list-group list-group-flush">
-          <p id="drag5" draggable="true">Fish</p>
-          <p id="drag6" draggable="true">Bird</p>
-          <p id="drag7" draggable="true">Falcon</p>
-          <p id="drag8" draggable="true">Mouse</p>
-        </div>
-    </div>
+                    {% for task in tasks %}
+                        {% if task.task_category == 2 %}
+                        <form action="delete/{{ task.id }}" method="delete">
+                            {% csrf_token %}
+                            <p id="{{task.id}}" class="custom-card" draggable="true">{{ task.task_name }}</p>
+                            <a><button type="submit" ><i class="fa fa-remove"></i></button></a>
+                        </form>
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                </div>
             </div>
             </div>
         </div>
-    </div>
+</div>
 {% endblock %}
  </body>
 </html>

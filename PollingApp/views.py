@@ -62,13 +62,36 @@ def registration(request):
 def home(request):
     form = TaskForm()
     task = TaskList()
+    tasks = TaskList.objects.filter(user_id=request.COOKIES.get('user'))
     if request.method == 'POST':
         form = TaskForm(request.POST)
         print(form.is_valid())
         if form.is_valid():
-            username = User.objects.get(user_name=request.COOKIES.get('user'))
+            username = User.objects.get(id=request.COOKIES.get('user'))
             task.task_name = form.cleaned_data['task_name']
             task.user = username
             task.task_category = 1
             task.save()
-    return render(request, 'polls/home.html', context={'form': form})
+    else:
+        form = TaskForm()
+        return render(request, 'polls/home.html', context={'form': form, "tasks": tasks})
+    return render(request, 'polls/home.html', context={'form': form, "tasks": tasks})
+
+
+def delete(request, task_id):
+    print('called')
+    TaskList.objects.get(id=task_id).delete()
+    task = TaskList.objects.filter(user_id=request.COOKIES.get('user'))
+    #render(request, 'polls/home.html', context={"tasks": task})
+    return HttpResponseRedirect('/home')
+
+def update(request, task_id, category_id):
+    print(category_id, task_id)
+    task = TaskList
+    task = TaskList.objects.get(id=task_id)
+    if task:
+        task.task_category = category_id
+        task.save()
+    task = TaskList.objects.filter(user_id=request.COOKIES.get('user'))
+    #render(request, 'polls/home.html', context={"tasks": task})
+    return HttpResponseRedirect('/home')
