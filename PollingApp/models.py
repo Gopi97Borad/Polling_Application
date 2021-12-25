@@ -13,23 +13,23 @@ class User(models.Model):
         db_table = "User"
 
     def __str__(self):
-        return self.title
+        return self.user_name
 
     def get_absolute_url(self):
         return reversed('post', kwargs={'id': self.id})
 
 
 class TaskList(models.Model):
-    user_id = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     task_name = models.CharField(max_length=2000)
-    task_category = models.IntegerField()
-    task_description = models.CharField(max_length=5000)
+    task_category = models.IntegerField(null=True)
+    task_description = models.CharField(max_length=5000,null=True)
 
     class Meta:
         db_table = "TaskList"
 
     def __str__(self):
-        return self.title
+        return self.task_name
 
     def get_absolute_url(self):
         return reversed('post', kwargs={'id': self.id})

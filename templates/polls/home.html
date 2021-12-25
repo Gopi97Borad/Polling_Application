@@ -1,35 +1,220 @@
+{% load widget_tweaks %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
 
-{% extends "polls/base.html" %}
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <!-- Bootstrap -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/css/dist/mdb5/plugins/all.min.css" rel="stylesheet">
+  <!-- Material Design for Bootstrap -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.16/css/mdb.min.css" rel="stylesheet">
 
-{% block title %}Homepage{% endblock %}
+    <style>
+.hide{
+  display:none;
+}
+.show{
+  display:block;
+}
+</style>
+<script>
 
+    function showDiv() {
+  document.getElementById('form').style.display = "block";
+  document.getElementById('btn').style.display = "none";
+}
+
+function showValue() {
+  var name = document.getElementById('name').value;
+  document.getElementById('form').style.display = "none";
+  document.getElementById('btn').style.display = "block";
+}
+function allowDrop(ev) {
+  ev.preventDefault();
+}
+
+function drag(ev) {
+  ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev) {
+  ev.preventDefault();
+  var data = ev.dataTransfer.getData('text');
+  var target = ev.target;
+  while (" "+target.className+" ".indexOf(" dropzone ") == -1) target = target.parentNode;
+  target.appendChild(document.getElementById(data));
+}
+window.addEventListener("load",function () {
+	var elms = document.querySelectorAll(".div1");
+	for (var i = 0; i < elms.length; i++) {
+		var zielzone = elms[i];
+		zielzone.addEventListener("drop",drop);
+		zielzone.addEventListener("dragover",allowDrop);
+	};
+
+	elms = document.querySelectorAll("[draggable=true]")
+	for (var i = 0; i < elms.length; i++) {
+		var draggable = elms[i];
+		draggable.addEventListener("dragstart",drag);
+	};
+});
+</script>
+</head>
 {% block main %}
 
+    <body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-primary">
+  <!-- Container wrapper -->
+  <div class="container-fluid">
+    <!-- Toggle button -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-mdb-toggle="collapse"
+      data-mdb-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Collapsible wrapper -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <!-- Navbar brand -->
+
+      <!-- Left links -->
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link font-weight-bold" style="color:#FFFF;font-size: 25px" href="#">Dashboard</a>
+        </li>
+      </ul>
+      <!-- Left links -->
+    </div>
+
+    <!-- Collapsible wrapper -->
+
+    <!-- Right elements -->
+    <div class="d-flex align-items-center">
+      <!-- Icon -->
+      <a class="text-reset me-3" href="#">
+        <i class="fas fa-shopping-cart"></i>
+      </a>
+
+      <!-- Notifications -->
+      <a
+        class="text-reset me-3 dropdown-toggle hidden-arrow"
+        href="#"
+        id="navbarDropdownMenuLink"
+        role="button"
+        data-mdb-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <i class="fas fa-bell"></i>
+        <span class="badge rounded-pill badge-notification bg-danger">1</span>
+      </a>
+      <ul
+        class="dropdown-menu dropdown-menu-end"
+        aria-labelledby="navbarDropdownMenuLink"
+      >
+        <li>
+          <a class="dropdown-item" href="#">Some news</a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="#">Another news</a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </li>
+      </ul>
+
+      <!-- Avatar -->
+      <a
+        class="dropdown-toggle d-flex align-items-center hidden-arrow"
+        href="#"
+        id="navbarDropdownMenuLink"
+        role="button"
+        data-mdb-toggle="dropdown"
+        aria-expanded="false"
+      >
+        <img
+          src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
+          class="rounded-circle"
+          height="25"
+          alt="Black and White Portrait of a Man"
+          loading="lazy"
+        />
+      </a>
+      <ul
+        class="dropdown-menu dropdown-menu-end"
+        aria-labelledby="navbarDropdownMenuLink"
+      >
+        <li>
+          <a class="dropdown-item" href="#">My profile</a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="#">Settings</a>
+        </li>
+        <li>
+          <a class="dropdown-item" href="#">Logout</a>
+        </li>
+      </ul>
+    </div>
+    <!-- Right elements -->
+  </div>
+  <!-- Container wrapper -->
+</nav>
+<!-- Navbar -->
+
 <div class="row">
-    <div class="col-lg-8 col-lg-offset-2">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">Available Polls</h3>
-            </div>
-
-            <ul class="list-group">
-                <li class="list-group-item">
-                    <strong>Which language is easier to learn?</strong>
-                    <span class="pull-right">
-                        <a href="vote/" class="btn btn-info btn-xs">Vote</a> &nbsp;
-                        <a href="results/"  class="btn btn-default btn-xs">View Results</a> &nbsp;
-                    </span>
-                </li>
-                <li class="list-group-item">
-                    <strong>Which operating system do you use?</strong>
-                    <span class="pull-right">
-                        <a href="#" class="btn btn-info btn-xs">Vote</a> &nbsp;
-                        <a href="#" class="btn btn-default btn-xs">View Results</a> &nbsp;
-                    </span>
-                </li>
-            </ul>
-
+    <div class="col-sm-6">
+        <div class="card div1">
+            <div class="card-body" id="div1">
+                <h4 class="card-title"><a>To do</a></h4>
+               <div class="card-text">
+                <div class="list-group drop-true list-group list-group-flush">
+                    <p id="drag1" draggable="true">Lion</p>
+                    <p id="drag2" draggable="true">Dog</p>
+                    <p id="drag3" draggable="true">Cat</p>
+                    <p id="drag4" draggable="true">Tiger</p>
+                </div>
+               </div>
+                <div id="div_ctrl">
+                    <form method="post" id="form" style="display:none;">
+                    {% csrf_token%}
+                            <label class="mt-2 text-black font-weight-normal" for="task_name">Enter Task: </label><br>
+                            {% render_field form.task_name class="form-control" %}
+                            <button type="submit" onclick="showValue()">submit</button>
+                    </form>
+                </div>
+                <div style="float: right">
+                    <button type="submit" id="btn" value="Show Text Field" onclick="showDiv()"><i class="fa fa-plus"></i></button>
+                </div>
+             </div>
         </div>
     </div>
-</div>
+            <br>
+    <div class="col-sm-6">
+        <div class="card div1">
+            <div class="card-body" id="div2">
+                  <h4 class="card-title"><a>Card title</a></h4>
+                <div class="card-text">
+                    <div class="list-group drop-true list-group list-group-flush">
+          <p id="drag5" draggable="true">Fish</p>
+          <p id="drag6" draggable="true">Bird</p>
+          <p id="drag7" draggable="true">Falcon</p>
+          <p id="drag8" draggable="true">Mouse</p>
+        </div>
+    </div>
+            </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
+ </body>
+</html>
