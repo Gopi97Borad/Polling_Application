@@ -19,3 +19,13 @@ class TaskForm(ModelForm):
             'task_category': forms.IntegerField(required=False),
             'task_description': forms.CharField(required=False)
         }]
+
+        def __init__(self):
+            self.field['task_name'].initial
+
+
+class EditTaskForm(ModelForm):
+    class Meta:
+        model = TaskList
+        fields = ['task_name']
+

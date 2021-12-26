@@ -9,10 +9,14 @@
   <!-- Bootstrap -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/css/dist/mdb5/plugins/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.1/mdb.min.css" rel="stylesheet"/>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.10.1/mdb.min.js"></script>
   <!-- Material Design for Bootstrap -->
   <link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.5.16/css/mdb.min.css" rel="stylesheet">
 
-    <style>
+
+<style>
+
 .custom-card {
         border: 0; !important;
     box-shadow: 0 10px 15px -3px rgb(0 0 0 / 7%), 0 4px 6px -2px rgb(0 0 0 / 5%);
@@ -29,11 +33,16 @@
     padding: 1.5rem;
 }
 </style>
-<script>
 
-    function showDiv() {
+<script>
+var tsk_id
+    var currentURL = window.location.href
+    var xhr = new XMLHttpRequest();
+
+function showDiv(){
   document.getElementById('form').style.display = "block";
   document.getElementById('btn').style.display = "none";
+  //document.getElementById('btn1').style.display = "none";
 }
 
 function showValue() {
@@ -62,12 +71,23 @@ function drop(ev) {
   while (" "+target.className+" ".indexOf(" dropzone ") == -1) target = target.parentNode;
   target.appendChild(document.getElementById(data));
   var parentId = target.parentNode.getAttribute("id");
-  var category = parentId == "card1" ? 1 : 2;
-  var currentURL = window.location.href
-    var xhr = new XMLHttpRequest();
+  var category = parentId == "card1" ? 1 : parentId == "card2" ? 2 : 3;
     xhr.open("GET", currentURL + 'update/' + data + '/' + category, true);
     xhr.send();
 }
+
+function logout() {
+    xhr.open("GET", currentURL + 'logout');
+    xhr.send();
+    //window.reload();
+}
+
+function fn_delete(id) {
+    xhr.open("GET", currentURL + 'delete/' + id, true);
+    xhr.send();
+    window.location.reload();
+}
+
 window.addEventListener("load",function () {
 	var elms = document.querySelectorAll(".div1");
 	for (var i = 0; i < elms.length; i++) {
@@ -82,131 +102,57 @@ window.addEventListener("load",function () {
 		draggable.addEventListener("dragstart",drag);
 	};
 });
+
+function editTask(ev) {
+     document.getElementById('q-'+ ev).style.display = "block";
+     document.getElementById('p-'+ ev).style.display = "none";
+}
+
+function hideCard(ev, action, token) {
+     document.getElementById('p-'+ ev).style.display = "block";
+     document.getElementById('q-'+ ev).style.display = "none";
+}
 </script>
 </head>
+
 {% block main %}
 
-    <body>
-
+<body>
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-  <!-- Container wrapper -->
   <div class="container-fluid">
-    <!-- Toggle button -->
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-mdb-toggle="collapse"
-      data-mdb-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <i class="fas fa-bars"></i>
-    </button>
-
-    <!-- Collapsible wrapper -->
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <!-- Navbar brand -->
-
-      <!-- Left links -->
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link font-weight-bold" style="color:#FFFF;font-size: 25px" href="#">Dashboard</a>
-        </li>
-      </ul>
-      <!-- Left links -->
-    </div>
-
-    <!-- Collapsible wrapper -->
-
-    <!-- Right elements -->
-    <div class="d-flex align-items-center">
-      <!-- Icon -->
-      <a class="text-reset me-3" href="#">
-        <i class="fas fa-shopping-cart"></i>
-      </a>
-
-      <!-- Notifications -->
-      <a
-        class="text-reset me-3 dropdown-toggle hidden-arrow"
-        href="#"
-        id="navbarDropdownMenuLink"
-        role="button"
-        data-mdb-toggle="dropdown"
-        aria-expanded="false"
-      >
-        <i class="fas fa-bell"></i>
-        <span class="badge rounded-pill badge-notification bg-danger">1</span>
-      </a>
-      <ul
-        class="dropdown-menu dropdown-menu-end"
-        aria-labelledby="navbarDropdownMenuLink"
-      >
-        <li>
-          <a class="dropdown-item" href="#">Some news</a>
-        </li>
-        <li>
-          <a class="dropdown-item" href="#">Another news</a>
-        </li>
-        <li>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </li>
-      </ul>
-
-      <!-- Avatar -->
-      <a
-        class="dropdown-toggle d-flex align-items-center hidden-arrow"
-        href="#"
-        id="navbarDropdownMenuLink"
-        role="button"
-        data-mdb-toggle="dropdown"
-        aria-expanded="false"
-      >
-        <img
-          src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp"
-          class="rounded-circle"
-          height="25"
-          alt="Black and White Portrait of a Man"
-          loading="lazy"
-        />
-      </a>
-      <ul
-        class="dropdown-menu dropdown-menu-end"
-        aria-labelledby="navbarDropdownMenuLink"
-      >
-        <li>
-          <a class="dropdown-item" href="#">My profile</a>
-        </li>
-        <li>
-          <a class="dropdown-item" href="#">Settings</a>
-        </li>
-        <li>
-          <a class="dropdown-item" href="#">Logout</a>
-        </li>
-      </ul>
-    </div>
-    <!-- Right elements -->
+      <form style="float: right">
+         <button type="submit" onclick="logout()"><i class="fa fa-power-off"></i></button>
+      </form>
   </div>
-  <!-- Container wrapper -->
 </nav>
 <!-- Navbar -->
 
 <div class="row">
-    <div class="col-sm-6">
+    <div class="col-sm-4">
         <div class="card" id="card1">
             <div class="card-body div1" id="div1">
-                <h4 class="card-title"><a>To do</a></h4>
+                <h4 class="card-title"><a>Doing</a></h4>
                <div class="card-text">
                 <div class="list-group drop-true list-group list-group-flush">
                     {% for task in tasks %}
-
                          {% if task.task_category == 1 %}
-                             <form action="delete/{{ task.id }}" method="delete">
+                             <form id="p-{{ task.id}}" method="post" action="delete/{{ task.id }}">
                                 {% csrf_token %}
-                                <p id="{{task.id}}" class="custom-card" draggable="true">{{ task.task_name }}</p>
-                                <a><button type="submit" ><i class="fa fa-remove"></i></button></a>
-                        </form>
+                                <div id="{{task.id}}" draggable="true">
+                                <p class="custom-card">{{ task.task_name }}</p>
+                                <a><button  type="button" onclick="editTask({{ task.id }})"><i class="fa fa-edit"></i></button></a>
+                                <a><button type="submit"><i class="fa fa-remove"></i></button></a>
+                                </div>
+                            </form>
+                            <form id="q-{{ task.id}}" method="post" action="edittask/{{ task.id }}" style="display: none">
+                                {% csrf_token %}
+                                <div class="custom-card" id="card-token">
+                                    {% render_field form.task_name value=task.task_name %}
+                                    <a><button type="submit" onclick="hideCard({{ task.id }}, 'save', this)">save</button></a>
+                                    <button type="button" onclick="hideCard({{ task.id }}, 'close', this)"><i class="fa fa-remove"></i></button>
+                                </div>
+                            </form>
                         {% endif %}
                     {% endfor %}
                 </div>
@@ -228,19 +174,62 @@ window.addEventListener("load",function () {
         </div>
     </div>
             <br>
-    <div class="col-sm-6">
+    <div class="col-sm-4">
         <div class="card" id="card2">
             <div class="card-body div1" id="div2">
-                  <h4 class="card-title"><a>Card title</a></h4>
+                  <h4 class="card-title"><a>To Do</a></h4>
                 <div class="card-text">
                     <div class="list-group drop-true list-group list-group-flush">
-                    {% for task in tasks %}
-                        {% if task.task_category == 2 %}
-                        <form action="delete/{{ task.id }}" method="delete">
-                            {% csrf_token %}
-                            <p id="{{task.id}}" class="custom-card" draggable="true">{{ task.task_name }}</p>
-                            <a><button type="submit" ><i class="fa fa-remove"></i></button></a>
-                        </form>
+                          {% for task in tasks %}
+                         {% if task.task_category == 2 %}
+                             <form id="p-{{ task.id}}" method="post" action="delete/{{ task.id }}">
+                                {% csrf_token %}
+                                <div id="{{task.id}}" draggable="true">
+                                <p class="custom-card">{{ task.task_name }}</p>
+                                <a><button  type="button" onclick="editTask({{ task.id }})"><i class="fa fa-edit"></i></button></a>
+                                <a><button type="submit"><i class="fa fa-remove"></i></button></a>
+                                </div>
+                            </form>
+                            <form id="q-{{ task.id}}" method="post" action="edittask/{{ task.id }}" style="display: none">
+                                {% csrf_token %}
+                                <div class="custom-card" id="card-token">
+                                    {% render_field form.task_name value=task.task_name %}
+                                    <a><button type="submit" onclick="hideCard({{ task.id }}, 'save', this)">save</button></a>
+                                    <button type="button" onclick="hideCard({{ task.id }}, 'close', this)"><i class="fa fa-remove"></i></button>
+                                </div>
+                            </form>
+                        {% endif %}
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+            <br>
+    <div class="col-sm-4">
+        <div class="card" id="card3">
+            <div class="card-body div1" id="div3">
+                  <h4 class="card-title"><a>Done{{ task_name }} </a></h4>
+                <div class="card-text">
+                    <div class="list-group drop-true list-group list-group-flush">
+                         {% for task in tasks %}
+                         {% if task.task_category == 3 %}
+                             <form id="p-{{ task.id}}" method="post" action="delete/{{ task.id }}">
+                                {% csrf_token %}
+                                <div id="{{task.id}}" draggable="true">
+                                <p class="custom-card">{{ task.task_name }}</p>
+                                <a><button  type="button" onclick="editTask({{ task.id }})"><i class="fa fa-edit"></i></button></a>
+                                <a><button type="submit"><i class="fa fa-remove"></i></button></a>
+                                </div>
+                            </form>
+                            <form id="q-{{ task.id}}" method="post" action="edittask/{{ task.id }}" style="display: none">
+                                {% csrf_token %}
+                                <div class="custom-card" id="card-token">
+                                    {% render_field form.task_name value=task.task_name %}
+                                    <a><button type="submit" onclick="hideCard({{ task.id }}, 'save', this)">save</button></a>
+                                    <button type="button" onclick="hideCard({{ task.id }}, 'close', this)"><i class="fa fa-remove"></i></button>
+                                </div>
+                            </form>
                         {% endif %}
                     {% endfor %}
                     </div>

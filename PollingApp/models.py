@@ -21,7 +21,7 @@ class User(models.Model):
 
 class TaskList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    task_name = models.CharField(max_length=2000)
+    task_name = models.CharField(max_length=2000,null=False)
     task_category = models.IntegerField(null=True)
     task_description = models.CharField(max_length=5000,null=True)
 
@@ -31,5 +31,6 @@ class TaskList(models.Model):
     def __str__(self):
         return self.task_name
 
-    def get_absolute_url(self):
-        return reversed('post', kwargs={'id': self.id})
+    def save(self, *args, **kwargs):
+        print('save() is called.')
+        super(TaskList, self).save(*args, **kwargs)

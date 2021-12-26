@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'PollingApp.apps.PollingappConfig',
     'widget_tweaks',
+    'bootstrap_modal_forms'
 ]
 
 MIDDLEWARE = [
@@ -71,6 +72,16 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'Polling.wsgi.application'
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '100/day', # 100 requests per day,
+        'user': '1000/day'
+    }
+}
 
 
 # Database
