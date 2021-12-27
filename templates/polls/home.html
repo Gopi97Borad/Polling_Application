@@ -19,23 +19,22 @@
 
 .custom-card {
         border: 0; !important;
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 7%), 0 4px 6px -2px rgb(0 0 0 / 5%);
-    /* max-width: 22rem; */
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    word-wrap: break-word;
-    background-color: #fff;
-    background-clip: border-box;
-    /* border: 1px solid rgba(0,0,0,.125); */
-    /* border-radius: 0.5rem; */
-    padding: 1.5rem;
-}
+        box-shadow: 0 10px 15px -3px rgb(0 0 0 / 7%), 0 4px 6px -2px rgb(0 0 0 / 5%);
+        /* max-width: 22rem; */
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        /* border: 1px solid rgba(0,0,0,.125); */
+        border-radius: 0.5rem;
+        padding: 0.8rem;
+    }
 </style>
 
 <script>
-var tsk_id
     var currentURL = window.location.href
     var xhr = new XMLHttpRequest();
 
@@ -74,12 +73,13 @@ function drop(ev) {
   var category = parentId == "card1" ? 1 : parentId == "card2" ? 2 : 3;
     xhr.open("GET", currentURL + 'update/' + data + '/' + category, true);
     xhr.send();
+    window.location.reload();
 }
 
 function logout() {
     xhr.open("GET", currentURL + 'logout');
     xhr.send();
-    //window.reload();
+    window.reload();
 }
 
 function fn_delete(id) {
@@ -120,123 +120,143 @@ function hideCard(ev, action, token) {
 <body>
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg navbar-light bg-primary">
-  <div class="container-fluid">
-      <form style="float: right">
-         <button type="submit" onclick="logout()"><i class="fa fa-power-off"></i></button>
+    <div>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link font-weight-bold" style="color:#FFFF;font-size: 25px" href="#">Dashboard</a>
+            </li>
+        </ul>
+    </div>
+      <form class="ml-auto ">
+         <button onclick="logout()" class="btn btn-primary fs-6"><i class="fa fa-power-off me-2"></i>Sign Out</button>
       </form>
-  </div>
 </nav>
 <!-- Navbar -->
 
-<div class="row">
-    <div class="col-sm-4">
-        <div class="card" id="card1">
+<div class="row mt-3 ms-1 me-1">
+    <div  class="col-sm-4">
+        <div style="background-color: #e0e0e0" class="card"  id="card1">
             <div class="card-body div1" id="div1">
-                <h4 class="card-title"><a>Doing</a></h4>
+                <h4 class="card-title"><a class="font-weight-bold" style="font-size: 35px">Doing</a></h4>
                <div class="card-text">
-                <div class="list-group drop-true list-group list-group-flush">
+                <div class="d-grid gap-3">
                     {% for task in tasks %}
                          {% if task.task_category == 1 %}
                              <form id="p-{{ task.id}}" method="post" action="delete/{{ task.id }}">
                                 {% csrf_token %}
-                                <div id="{{task.id}}" draggable="true">
-                                <p class="custom-card">{{ task.task_name }}</p>
-                                <a><button  type="button" onclick="editTask({{ task.id }})"><i class="fa fa-edit"></i></button></a>
-                                <a><button type="submit"><i class="fa fa-remove"></i></button></a>
+                                <div style="display:flex;justify-content: space-between;flex-direction: row; margin-top: 10px}" class="custom-card d-flex align-items-center " id="{{task.id}}" draggable="true">
+                                    <p class=" fw-bold fs-6 text-wrap" style="color: black;width: 18rem">{{ task.task_name }}</p>
+                                    <div>
+                                        <a><button class="btn btn-link px-2 me-0"  type="button" onclick="editTask({{ task.id }})"><i class="fa fa-edit fa-lg"></i></button></a>
+                                        <a><button class="btn btn-link px-2 me-0" type="submit"><i class="fa fa-trash fa-lg"></i></button></a>
+                                    </div>
                                 </div>
                             </form>
                             <form id="q-{{ task.id}}" method="post" action="edittask/{{ task.id }}" style="display: none">
                                 {% csrf_token %}
-                                <div class="custom-card" id="card-token">
-                                    {% render_field form.task_name value=task.task_name %}
-                                    <a><button type="submit" onclick="hideCard({{ task.id }}, 'save', this)">save</button></a>
-                                    <button type="button" onclick="hideCard({{ task.id }}, 'close', this)"><i class="fa fa-remove"></i></button>
+                                <div style="display:flex;justify-content: space-between;flex-direction: row;}" class="custom-card d-flex align-items-center " id="card-token">
+                                    {% render_field form.task_name value=task.task_name class="fw-bold fs-6 text-wrap" style="color: black;width: 18rem" %}
+                                    <div>
+                                       <a><button class="btn btn-link px-2 me-0" type="submit" onclick="hideCard({{ task.id }}, 'save', this)">save</button></a>
+                                        <button class="btn btn-link px-2 me-0" type="button" onclick="hideCard({{ task.id }}, 'close', this)"><i class="fa fa-remove"></i></button>
+                                    </div>
                                 </div>
                             </form>
                         {% endif %}
                     {% endfor %}
                 </div>
                </div>
-                <div id="div_ctrl">
+                <div style="display:flex;justify-content: space-between;flex-direction: row;}" class="d-flex align-items-center row" id="div_ctrl">
                     <form method="post" id="form" style="display:none;">
                     {% csrf_token%}
-                            <label class="mt-2 text-black font-weight-normal" for="task_name">Enter Task: </label><br>
+                        <div>
+                             <label class="mt-2 text-black font-weight-normal" for="task_name">Enter Task: </label>
                             {% render_field form.task_name class="form-control" %}
-                            <br>
-                            <button type="submit" onclick="showValue()">submit</button>
-                            <button type="button" onclick="showValue1()"><i class="fa fa-close"></i></button>
+                        </div>
+                         <div>
+                            <button type="submit" style="padding: 10px"  class="btn btn-primary align-text-bottom " onclick="showValue()">Add Task</button>
+                            <button type="button" class="btn btn-link px-2 me-0" style="font-size: 16px" onclick="showValue1()"><i class="fa fa-close fa-lg"></i></button>
+                         </div>
                     </form>
                 </div>
                 <div style="float: right">
-                    <button type="submit" id="btn" onclick="showDiv()"><i class="fa fa-plus"></i></button>
+                    <button style="border-radius: 50%;padding: 0;position: relative;}" class="btn btn-primary btn-floating" type="submit" id="btn" onclick="showDiv()"><i class="fa fa-plus"></i></button>
                 </div>
              </div>
         </div>
     </div>
             <br>
-    <div class="col-sm-4">
-        <div class="card" id="card2">
+     <div  class="col-sm-4">
+        <div style="background-color: #e0e0e0" class="card"  id="card2">
             <div class="card-body div1" id="div2">
-                  <h4 class="card-title"><a>To Do</a></h4>
-                <div class="card-text">
-                    <div class="list-group drop-true list-group list-group-flush">
-                          {% for task in tasks %}
+                <h4 class="card-title"><a class="font-weight-bold" style="font-size: 35px">To Do</a></h4>
+               <div class="card-text">
+                <div class="d-grid gap-3">
+                    {% for task in tasks %}
                          {% if task.task_category == 2 %}
                              <form id="p-{{ task.id}}" method="post" action="delete/{{ task.id }}">
                                 {% csrf_token %}
-                                <div id="{{task.id}}" draggable="true">
-                                <p class="custom-card">{{ task.task_name }}</p>
-                                <a><button  type="button" onclick="editTask({{ task.id }})"><i class="fa fa-edit"></i></button></a>
-                                <a><button type="submit"><i class="fa fa-remove"></i></button></a>
+                                <div style="display:flex;justify-content: space-between;flex-direction: row;margin-top: 10px}" class="custom-card d-flex align-items-center " id="{{task.id}}" draggable="true">
+                                    <p class=" fw-bold fs-6 text-wrap" style="color: black;width: 18rem">{{ task.task_name }}</p>
+                                    <div>
+                                        <a><button class="btn btn-link px-2 me-0"  type="button" onclick="editTask({{ task.id }})"><i class="fa fa-edit fa-lg"></i></button></a>
+                                        <a><button class="btn btn-link px-2 me-0" type="submit"><i class="fa fa-trash fa-lg"></i></button></a>
+                                    </div>
                                 </div>
                             </form>
                             <form id="q-{{ task.id}}" method="post" action="edittask/{{ task.id }}" style="display: none">
                                 {% csrf_token %}
-                                <div class="custom-card" id="card-token">
-                                    {% render_field form.task_name value=task.task_name %}
-                                    <a><button type="submit" onclick="hideCard({{ task.id }}, 'save', this)">save</button></a>
-                                    <button type="button" onclick="hideCard({{ task.id }}, 'close', this)"><i class="fa fa-remove"></i></button>
+                                <div style="display:flex;justify-content: space-between;flex-direction: row;}" class="custom-card d-flex align-items-center " id="card-token">
+                                    {% render_field form.task_name value=task.task_name class="fw-bold fs-6 text-wrap" style="color: black;width: 18rem" %}
+                                    <div>
+                                       <a><button class="btn btn-link px-2 me-0" type="submit" onclick="hideCard({{ task.id }}, 'save', this)">save</button></a>
+                                        <button class="btn btn-link px-2 me-0" type="button" onclick="hideCard({{ task.id }}, 'close', this)"><i class="fa fa-remove"></i></button>
+                                    </div>
                                 </div>
                             </form>
                         {% endif %}
                     {% endfor %}
-                    </div>
                 </div>
-            </div>
-            </div>
+               </div>
+             </div>
         </div>
+    </div>
             <br>
-    <div class="col-sm-4">
-        <div class="card" id="card3">
+     <div  class="col-sm-4">
+        <div style="background-color: #e0e0e0" class="card"  id="card3">
             <div class="card-body div1" id="div3">
-                  <h4 class="card-title"><a>Done{{ task_name }} </a></h4>
-                <div class="card-text">
-                    <div class="list-group drop-true list-group list-group-flush">
-                         {% for task in tasks %}
+                <h4 class="card-title"><a class="font-weight-bold" style="font-size: 35px">Done</a></h4>
+               <div class="card-text">
+                <div class="d-grid gap-3">
+                    {% for task in tasks %}
                          {% if task.task_category == 3 %}
                              <form id="p-{{ task.id}}" method="post" action="delete/{{ task.id }}">
                                 {% csrf_token %}
-                                <div id="{{task.id}}" draggable="true">
-                                <p class="custom-card">{{ task.task_name }}</p>
-                                <a><button  type="button" onclick="editTask({{ task.id }})"><i class="fa fa-edit"></i></button></a>
-                                <a><button type="submit"><i class="fa fa-remove"></i></button></a>
+                                <div style="display:flex;justify-content: space-between;flex-direction: row;margin-top: 10px}" class="custom-card d-flex align-items-center " id="{{task.id}}" draggable="true">
+                                    <p class=" fw-bold fs-6 text-wrap" style="color: black;width: 18rem">{{ task.task_name }}</p>
+                                    <div>
+                                        <a><button class="btn btn-link px-2 me-0"  type="button" onclick="editTask({{ task.id }})"><i class="fa fa-edit fa-lg"></i></button></a>
+                                        <a><button class="btn btn-link px-2 me-0" type="submit"><i class="fa fa-trash fa-lg"></i></button></a>
+                                    </div>
                                 </div>
                             </form>
                             <form id="q-{{ task.id}}" method="post" action="edittask/{{ task.id }}" style="display: none">
                                 {% csrf_token %}
-                                <div class="custom-card" id="card-token">
-                                    {% render_field form.task_name value=task.task_name %}
-                                    <a><button type="submit" onclick="hideCard({{ task.id }}, 'save', this)">save</button></a>
-                                    <button type="button" onclick="hideCard({{ task.id }}, 'close', this)"><i class="fa fa-remove"></i></button>
+                                <div style="display:flex;justify-content: space-between;flex-direction: row;}" class="custom-card d-flex align-items-center " id="card-token">
+                                    {% render_field form.task_name value=task.task_name class="fw-bold fs-6 text-wrap" style="color: black;width: 18rem" %}
+                                    <div>
+                                       <a><button class="btn btn-link px-2 me-0" type="submit" onclick="hideCard({{ task.id }}, 'save', this)">save</button></a>
+                                        <button class="btn btn-link px-2 me-0" type="button" onclick="hideCard({{ task.id }}, 'close', this)"><i class="fa fa-remove"></i></button>
+                                    </div>
                                 </div>
                             </form>
                         {% endif %}
                     {% endfor %}
-                    </div>
                 </div>
-            </div>
-            </div>
+               </div>
+             </div>
         </div>
+    </div>
 </div>
 {% endblock %}
  </body>

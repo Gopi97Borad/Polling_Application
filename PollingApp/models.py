@@ -2,8 +2,11 @@ from django.db import models
 
 
 # Create your models here.
+from django.forms import forms
+
+
 class User(models.Model):
-    user_name = models.CharField(max_length=150, unique=True)
+    user_name = models.CharField(max_length=150, unique=True, null=True)
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
     email = models.CharField(max_length=250)

@@ -54,7 +54,6 @@ def registration(request):
     form = RegistrationForm(request.POST)
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
-        print(form.is_valid())
         if form.is_valid():
             form.save()
             return redirect('/')
@@ -78,6 +77,8 @@ def home(request, task_id=''):
                 task.user = username
                 task.task_category = 1
                 task.save()
+                form = TaskForm()
+                return HttpResponseRedirect("/home")
         else:
             print('called!!!!')
             form = TaskForm()
