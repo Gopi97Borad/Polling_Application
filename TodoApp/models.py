@@ -1,10 +1,10 @@
 from django.db import models
 
-
 # Create your models here.
 from django.forms import forms
 
 
+# create User model based on registration entry
 class User(models.Model):
     user_name = models.CharField(max_length=150, unique=True, null=True)
     first_name = models.CharField(max_length=150)
@@ -22,11 +22,12 @@ class User(models.Model):
         return reversed('post', kwargs={'id': self.id})
 
 
+# create TaskList model for grabbing all task details
 class TaskList(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    task_name = models.CharField(max_length=2000,null=False)
+    task_name = models.CharField(max_length=2000, null=False)
     task_category = models.IntegerField(null=True)
-    task_description = models.CharField(max_length=5000,null=True)
+    task_description = models.CharField(max_length=5000, null=True)
 
     class Meta:
         db_table = "TaskList"

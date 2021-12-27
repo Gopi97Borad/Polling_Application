@@ -13,6 +13,7 @@ from .models import *
 from django.contrib import messages
 
 
+# used for successful login based on username and password of already exist user
 def login(request):
     context = {}
     form = user_login.LoginForm()
@@ -31,25 +32,11 @@ def login(request):
                 return response
             else:
                 messages.info(request, 'Your Username or Password is Invalid')
-                return render(request, 'polls/user_login.html', context={'form': form, 'message': message})
-    return render(request, 'polls/user_login.html', context={'form': form})
+                return render(request, 'layouts/user_login.html', context={'form': form, 'message': message})
+    return render(request, 'layouts/user_login.html', context={'form': form})
 
 
-def create(request):
-    context = {}
-    return render(request, 'polls/create.html', context)
-
-
-def results(request):
-    context = {}
-    return render(request, 'polls/results.html', context)
-
-
-def vote(request):
-    context = {}
-    return render(request, 'polls/vote.html', context)
-
-
+# used to save the registration data of new user
 def registration(request):
     form = RegistrationForm(request.POST)
     if request.method == 'POST':
@@ -57,9 +44,9 @@ def registration(request):
         if form.is_valid():
             form.save()
             return redirect('/')
-    return render(request, 'polls/user_registration.html', context={'form': form})
+    return render(request, 'layouts/user_registration.html', context={'form': form})
 
-
+# function to add new task in model
 def home(request, task_id=''):
     print(request)
     tasks_list = TaskList
@@ -80,13 +67,12 @@ def home(request, task_id=''):
                 form = TaskForm()
                 return HttpResponseRedirect("/home")
         else:
-            print('called!!!!')
             form = TaskForm()
-            return render(request, 'polls/home.html', context={'form': form, "tasks": tasks})
-        return render(request, 'polls/home.html', context={'form': form, "tasks": tasks})
+            return render(request, 'layouts/home.html', context={'form': form, "tasks": tasks})
+        return render(request, 'layouts/home.html', context={'form': form, "tasks": tasks})
     return redirect('/')
 
-
+#function to delete particular task
 def delete(request, task_id):
     print('called')
     if request.session.get('user'):
@@ -97,7 +83,7 @@ def delete(request, task_id):
         return redirect('/home')
     return redirect('/')
 
-
+#function to edit particular task's task name
 def editTask(request, task_id):
     form = TaskForm()
     if request.method == 'POST':
@@ -111,7 +97,7 @@ def editTask(request, task_id):
         return redirect('/home')
     return redirect('/')
 
-
+#function to update task category Ex. From to do -> done
 def update(request, task_id, category_id):
     if request.session.get('user'):
         task = TaskList
@@ -122,7 +108,7 @@ def update(request, task_id, category_id):
         return HttpResponseRedirect('/home')
     return redirect('/')
 
-
+#function to handle user logout
 def logout_d(request):
     del request.session['user']
     return redirect('/')
