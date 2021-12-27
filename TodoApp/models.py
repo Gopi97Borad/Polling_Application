@@ -6,7 +6,7 @@ from django.forms import forms
 
 # create User model based on registration entry
 class User(models.Model):
-    user_name = models.CharField(max_length=150, unique=True, null=True)
+    user_name = models.CharField(max_length=150)
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
     email = models.CharField(max_length=250)

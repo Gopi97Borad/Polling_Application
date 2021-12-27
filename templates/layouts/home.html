@@ -1,6 +1,5 @@
 {% load widget_tweaks %}
 {% load static %}
-
 {% include 'layouts/base.html' %}
 <!DOCTYPE html>
 <html lang="en">
@@ -65,15 +64,8 @@
       var category = parentId == "card1" ? 1 : parentId == "card2" ? 2 : 3;
         xhr.open("GET", currentURL + 'update/' + data + '/' + category, true);
         xhr.send();
-        window.location.reload();
+       window.location.reload();
     }
-
-    function logout() {
-        xhr.open("GET", currentURL + 'logout');
-        xhr.send();
-        window.reload();
-    }
-
 
 /*function fn_delete(id) {
     xhr.open("GET", currentURL + 'delete/' + id, true);
@@ -118,7 +110,7 @@
     <div  class="col-sm-4">
         <div style="background-color: #e0e0e0" class="card"  id="card1">
             <div class="card-body div1" id="div1">
-                <h4 class="card-title"><a class="font-weight-bold" style="font-size: 35px">Doing</a></h4>
+                <h4 class="card-title"><a class="font-weight-bold" style="font-size: 25px">Doing</a></h4>
                <div class="card-text">
                 <div class="d-grid gap-3">
                     {% for task in tasks %}
@@ -128,8 +120,8 @@
                                 <div style="display:flex;justify-content: space-between;flex-direction: row; margin-top: 10px}" class="custom-card d-flex align-items-center " id="{{task.id}}" draggable="true">
                                     <p class=" fw-bold fs-6 text-wrap" style="color: black;width: 18rem">{{ task.task_name }}</p>
                                     <div>
-                                        <a><button class="btn btn-link px-2 me-0"  type="button" onclick="editTask({{ task.id }})"><i class="fa fa-edit fa-lg"></i></button></a>
-                                        <a><button class="btn btn-link px-2 me-0" type="submit"><i class="fa fa-trash fa-lg"></i></button></a>
+                                        <a title="Edit"><button class="btn btn-link px-2 me-0"  type="button" onclick="editTask({{ task.id }})"><i class="fa fa-edit fa-lg"></i></button></a>
+                                        <a title="Delete"><button class="btn btn-link px-2 me-0" type="submit"><i class="fa fa-trash fa-lg"></i></button></a>
                                     </div>
                                 </div>
                             </form>
@@ -139,7 +131,7 @@
                                     {% render_field form.task_name value=task.task_name class="fw-bold fs-6 text-wrap" style="color: black;width: 18rem" %}
                                     <div>
                                        <a><button class="btn btn-link px-2 me-0" type="submit" onclick="hideCard({{ task.id }}, 'save', this)">save</button></a>
-                                        <button class="btn btn-link px-2 me-0" type="button" onclick="hideCard({{ task.id }}, 'close', this)"><i class="fa fa-remove"></i></button>
+                                        <button title="Close" class="btn btn-link px-2 me-0" type="button" onclick="hideCard({{ task.id }}, 'close', this)"><i class="fa fa-remove"></i></button>
                                     </div>
                                 </div>
                             </form>
@@ -156,12 +148,12 @@
                         </div>
                          <div>
                             <button type="submit" style="padding: 10px"  class="btn btn-primary align-text-bottom " onclick="showValue()">Add Task</button>
-                            <button type="button" class="btn btn-link px-2 me-0" style="font-size: 16px" onclick="showValue1()"><i class="fa fa-close fa-lg"></i></button>
+                            <button title="close" type="button" class="btn btn-link px-2 me-0" style="font-size: 16px" onclick="showValue1()"><i class="fa fa-close fa-lg"></i></button>
                          </div>
                     </form>
                 </div>
                 <div style="float: right">
-                    <button style="border-radius: 50%;padding: 0;position: relative;}" class="btn btn-primary btn-floating" type="submit" id="btn" onclick="showDiv()"><i class="fa fa-plus"></i></button>
+                    <button title="Add" style="border-radius: 50%;padding: 0;position: relative;}" class="btn btn-primary btn-floating" type="submit" id="btn" onclick="showDiv()"><i class="fa fa-plus"></i></button>
                 </div>
              </div>
         </div>
@@ -169,7 +161,7 @@
      <div  class="col-sm-4">
         <div style="background-color: #e0e0e0" class="card"  id="card2">
             <div class="card-body div1" id="div2">
-                <h4 class="card-title"><a class="font-weight-bold" style="font-size: 35px">To Do</a></h4>
+                <h4 class="card-title"><a class="font-weight-bold" style="font-size: 25px">To Do</a></h4>
                <div class="card-text">
                 <div class="d-grid gap-3">
                     {% for task in tasks %}
@@ -179,8 +171,8 @@
                                 <div style="display:flex;justify-content: space-between;flex-direction: row;margin-top: 10px}" class="custom-card d-flex align-items-center " id="{{task.id}}" draggable="true">
                                     <p class=" fw-bold fs-6 text-wrap" style="color: black;width: 18rem">{{ task.task_name }}</p>
                                     <div>
-                                        <a><button class="btn btn-link px-2 me-0"  type="button" onclick="editTask({{ task.id }})"><i class="fa fa-edit fa-lg"></i></button></a>
-                                        <a><button class="btn btn-link px-2 me-0" type="submit"><i class="fa fa-trash fa-lg"></i></button></a>
+                                        <a title="Edit"><button class="btn btn-link px-2 me-0"  type="button" onclick="editTask({{ task.id }})"><i class="fa fa-edit fa-lg"></i></button></a>
+                                        <a title="Delete"><button class="btn btn-link px-2 me-0" type="submit"><i class="fa fa-trash fa-lg"></i></button></a>
                                     </div>
                                 </div>
                             </form>
@@ -190,7 +182,7 @@
                                     {% render_field form.task_name value=task.task_name class="fw-bold fs-6 text-wrap" style="color: black;width: 18rem" %}
                                     <div>
                                        <a><button class="btn btn-link px-2 me-0" type="submit" onclick="hideCard({{ task.id }}, 'save', this)">save</button></a>
-                                        <button class="btn btn-link px-2 me-0" type="button" onclick="hideCard({{ task.id }}, 'close', this)"><i class="fa fa-remove"></i></button>
+                                        <button title="Close" class="btn btn-link px-2 me-0" type="button" onclick="hideCard({{ task.id }}, 'close', this)"><i class="fa fa-remove"></i></button>
                                     </div>
                                 </div>
                             </form>
@@ -204,7 +196,7 @@
      <div  class="col-sm-4">
         <div style="background-color: #e0e0e0" class="card"  id="card3">
             <div class="card-body div1" id="div3">
-                <h4 class="card-title"><a class="font-weight-bold" style="font-size: 35px">Done</a></h4>
+                <h4 class="card-title"><a class="font-weight-bold" style="font-size: 25px">Done</a></h4>
                <div class="card-text">
                 <div class="d-grid gap-3">
                     {% for task in tasks %}
@@ -214,8 +206,8 @@
                                 <div style="display:flex;justify-content: space-between;flex-direction: row;margin-top: 10px}" class="custom-card d-flex align-items-center " id="{{task.id}}" draggable="true">
                                     <p class=" fw-bold fs-6 text-wrap" style="color: black;width: 18rem">{{ task.task_name }}</p>
                                     <div>
-                                        <a><button class="btn btn-link px-2 me-0"  type="button" onclick="editTask({{ task.id }})"><i class="fa fa-edit fa-lg"></i></button></a>
-                                        <a><button class="btn btn-link px-2 me-0" type="submit"><i class="fa fa-trash fa-lg"></i></button></a>
+                                        <a title="Edit"><button class="btn btn-link px-2 me-0"  type="button" onclick="editTask({{ task.id }})"><i class="fa fa-edit fa-lg"></i></button></a>
+                                        <a title="Delete"><button class="btn btn-link px-2 me-0" type="submit"><i class="fa fa-trash fa-lg"></i></button></a>
                                     </div>
                                 </div>
                             </form>
@@ -225,7 +217,7 @@
                                     {% render_field form.task_name value=task.task_name class="fw-bold fs-6 text-wrap" style="color: black;width: 18rem" %}
                                     <div>
                                        <a><button class="btn btn-link px-2 me-0" type="submit" onclick="hideCard({{ task.id }}, 'save', this)">save</button></a>
-                                        <button class="btn btn-link px-2 me-0" type="button" onclick="hideCard({{ task.id }}, 'close', this)"><i class="fa fa-remove"></i></button>
+                                        <button title="Close" class="btn btn-link px-2 me-0" type="button" onclick="hideCard({{ task.id }}, 'close', this)"><i class="fa fa-remove"></i></button>
                                     </div>
                                 </div>
                             </form>

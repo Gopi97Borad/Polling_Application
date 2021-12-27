@@ -1,14 +1,12 @@
 # from django.shortcuts import render
 
 # Create your views here.
-from django.contrib.auth import logout
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
-from django.views.generic import CreateView
 
 from . import user_login
-from .forms import RegistrationForm, TaskForm, EditTaskForm
+from .forms import RegistrationForm, TaskForm
 from .models import *
 from django.contrib import messages
 
@@ -46,6 +44,7 @@ def registration(request):
             return redirect('/')
     return render(request, 'layouts/user_registration.html', context={'form': form})
 
+
 # function to add new task in model
 def home(request, task_id=''):
     print(request)
@@ -72,18 +71,19 @@ def home(request, task_id=''):
         return render(request, 'layouts/home.html', context={'form': form, "tasks": tasks})
     return redirect('/')
 
-#function to delete particular task
+
+# function to delete particular task
 def delete(request, task_id):
     print('called')
     if request.session.get('user'):
         TaskList.objects.get(id=task_id).delete()
-        # TaskList.refresh_from_db(self)
         tasks = TaskList.objects.filter(user_id=request.session.get('user'))
         print(tasks)
         return redirect('/home')
     return redirect('/')
 
-#function to edit particular task's task name
+
+# function to edit particular task's task name
 def editTask(request, task_id):
     form = TaskForm()
     if request.method == 'POST':
@@ -97,7 +97,30 @@ def editTask(request, task_id):
         return redirect('/home')
     return redirect('/')
 
-#function to update task category Ex. From to do -> done
+
+# function to update user information
+def updateUserData(request):
+    form = RegistrationForm()
+    user = User.objects.get(id=request.session.get('user'))
+    if request.session.get('user'):
+        if request.method == 'POST':
+            form = RegistrationForm(request.POST)
+            print(request.POST)
+            if form.is_valid():
+                print('called')
+                user.user_name = form.cleaned_data['user_name']
+                user.first_name = form.cleaned_data['first_name']
+                user.last_name = form.cleaned_data['last_name']
+                user.email = form.cleaned_data['email']
+                user.pwd = form.cleaned_data['pwd']
+                user.save()
+                form = RegistrationForm()
+                return HttpResponseRedirect("/home/account")
+        form = RegistrationForm()
+        return render(request, 'layouts/myaccount.html', context={'form': form, 'user': user})
+    return redirect('/')
+
+# function to update task category Ex. From to do -> done
 def update(request, task_id, category_id):
     if request.session.get('user'):
         task = TaskList
@@ -108,7 +131,8 @@ def update(request, task_id, category_id):
         return HttpResponseRedirect('/home')
     return redirect('/')
 
-#function to handle user logout
+
+# function to handle user logout
 def logout_d(request):
     del request.session['user']
     return redirect('/')
